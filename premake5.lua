@@ -19,10 +19,15 @@ project( "flare" )
 	includedirs{ "%{_WORKING_DIR}/extern/include", "include/flare" }
 
 
+	links{ "glfw3" }
+
 	filter{ "system:windows" }
 		defines{ "_WINDOWS" }
+		links{ "opengl32" }
 	filter{ "system:linux" }
 		defines{ "_LINUX" }
+		links{ "GL", "GLU", "X11", "Xxf86vm", "Xrandr", "pthread", "Xi", "Xinerama", "Xcursor" }
+		buildoptions{ "-std=c++11" }
 
 	
 	filter{ "configurations:Debug" }
@@ -30,7 +35,6 @@ project( "flare" )
 		flags{ "Symbols" }
 		debugenvs{ "PATH=%PATH%;extern/dll/Debug" }
 		libdirs{ "extern/lib/Debug" }
-		links{ "glfw3", "opengl32" }
 	filter{ "configurations:Debug", "system:windows" }
 		--links{ "glew32d", "assimpd" }
 
@@ -42,7 +46,7 @@ project( "flare" )
 		defines{ "_NDEBUG" }
 		flags{ "OptimizeSpeed" }
 		libdirs{ "extern/lib/Release" }
-		links{ "glfw3", "opengl32" }
+		
 	filter{ "configurations:OptimisedDebug or Release", "system:windows" }
 		debugenvs{ "PATH=%PATH%;extern/dll/Release" }
 		
