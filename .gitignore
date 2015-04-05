@@ -1,0 +1,5 @@
+_project/
+bin/
+extern/dll/
+extern/lib/
+log.txt
