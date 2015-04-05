@@ -40,7 +40,7 @@ namespace flare {
 			}
 		}
 
-		static void KeyCallback( GLFWwindow* a_pWindow, int a_key, int a_scancode, int a_action, int a_mods ) {
+		static void KeyCallback( GLFWwindow*, int a_key, int, int a_action, int ) {
 			bool down = ( a_action != GLFW_RELEASE );
 
 			KeyCode code = KeyCode::Count;

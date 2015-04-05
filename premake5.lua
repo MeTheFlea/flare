@@ -20,6 +20,7 @@ project( "flare" )
 
 
 	links{ "glfw3" }
+	flags{ "ExtraWarnings" }
 
 	filter{ "system:windows" }
 		defines{ "_WINDOWS" }
