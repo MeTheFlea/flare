@@ -1,30 +1,8 @@
-#include "external/glfw.h"
+#include "core/engine.h"
+#include "game.h"
 
 int main() {
-	GLFWwindow* pWindow;
-
-	if( !glfwInit() ) {
-		glfwTerminate();
-		return 1;
-	}
-
-	pWindow = glfwCreateWindow( 1280, 768, "Flare v3", NULL, NULL );
-   if( !pWindow ) {
-      glfwTerminate();
-      return 1;
-	}
-
-	glfwMakeContextCurrent( pWindow );
-   glfwSwapInterval( 1 );
-
-	while( !glfwWindowShouldClose( pWindow ) ) {
-
-
-		glfwSwapBuffers( pWindow );
-		glfwPollEvents();
-	}
-
-	glfwDestroyWindow( pWindow );
-	glfwTerminate();
+	flare::Engine<Game> engine( "flare v3", 1280, 768 );
+	engine.Run();
 	return 0;
 }
