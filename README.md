@@ -1,5 +1,9 @@
+#Description
+This will eventually be a 3D component-based game engine using OpenGL 3.3+.
+
 #Build Instructions
 ##Prerequisites
+- OpenGL 3.3+
 - [GLFW 3.1.1](http://www.glfw.org/)
 - [Premake 5](https://github.com/premake/premake-core/wiki)
 
