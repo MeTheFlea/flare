@@ -27,6 +27,7 @@ namespace flare {
 			m_game.OnInit();
 		}
 
+		// run the main loop of the templated Game set in the constructor of the engine (this will call OnUpdate() and OnRender() on the game, and Reset() on the Input manager appropriately)
 		void Run() {
 			while( !glfwWindowShouldClose( m_pWindow ) ) {
 				glfwPollEvents();

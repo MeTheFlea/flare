@@ -15,6 +15,7 @@ void Game::OnInit() {
 	Input.AddKeyMap( "Quit", KeyCode::ESCAPE );
 	Input.AddKeyMap( "Quit", KeyCode::F );
 	Input.AddKeyMap( "Quit", KeyCode::LSHIFT );
+
 }
 
 void Game::OnUpdate() {
