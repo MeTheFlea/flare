@@ -8,7 +8,7 @@ int main() {
 		return 1;
 	}
 
-	pWindow = glfwCreateWindow( 640, 480, "Flare v3", NULL, NULL );
+	pWindow = glfwCreateWindow( 1280, 768, "Flare v3", NULL, NULL );
    if( !pWindow ) {
       glfwTerminate();
       return 1;
