@@ -7,7 +7,7 @@ namespace flare {
 
 	enum class KeyCode : unsigned char {
 		A = 0U, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
-		ESCAPE, RETURN, SPACE, LSHIFT, RSHIFT, LALT, RALT, BACKSPACE,
+		ESCAPE, RETURN, SPACE, LSHIFT, RSHIFT, LALT, RALT, BACKSPACE, TAB,
 		Count
 	};
 

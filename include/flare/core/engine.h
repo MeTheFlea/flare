@@ -82,6 +82,7 @@ namespace flare {
 				MapGLFWToInput( GLFW_KEY_LEFT_ALT, KeyCode::LALT );
 				MapGLFWToInput( GLFW_KEY_RIGHT_ALT, KeyCode::RALT );
 				MapGLFWToInput( GLFW_KEY_BACKSPACE, KeyCode::BACKSPACE );
+				MapGLFWToInput( GLFW_KEY_TAB, KeyCode::TAB );
 			}
 			
 			if( code != KeyCode::Count ) {
