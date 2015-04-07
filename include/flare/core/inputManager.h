@@ -45,6 +45,8 @@ namespace flare {
 		void SetKey( const KeyCode& a_key, const bool a_value );
 		void Reset();
 
+		std::pair<std::unordered_map<Key, KeyCode>::const_iterator, std::unordered_map<Key, KeyCode>::const_iterator> GetKeysFromButton( const std::string& a_button ) const;
+
 		std::unordered_multimap<Key, KeyCode> m_inputMap;
 	};
 }

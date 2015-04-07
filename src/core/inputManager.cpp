@@ -24,9 +24,8 @@ bool InputManager::GetKeyUp( const KeyCode& a_key ) const {
 }
 
 bool InputManager::GetButtonDown( const std::string& a_button ) const {
-	const Key hashed = HashString( a_button );
+	auto findResult = GetKeysFromButton( a_button );
 
-	auto findResult = m_inputMap.equal_range( hashed );
 	for( auto it = (findResult).first; it != (findResult).second; ++it ) {
 		KeyCode key = (*it).second;
 		
@@ -39,9 +38,8 @@ bool InputManager::GetButtonDown( const std::string& a_button ) const {
 }
 
 bool InputManager::GetButtonUp( const std::string& a_button ) const {
-	const Key hashed = HashString( a_button );
+	auto findResult = GetKeysFromButton( a_button );
 
-	auto findResult = m_inputMap.equal_range( hashed );
 	for( auto it = (findResult).first; it != (findResult).second; ++it ) {
 		KeyCode key = (*it).second;
 		
@@ -54,9 +52,8 @@ bool InputManager::GetButtonUp( const std::string& a_button ) const {
 }
 
 bool InputManager::GetButton( const std::string& a_button ) const {
-	const Key hashed = HashString( a_button );
+	auto findResult = GetKeysFromButton( a_button );
 
-	auto findResult = m_inputMap.equal_range( hashed );
 	for( auto it = (findResult).first; it != (findResult).second; ++it ) {
 		KeyCode key = (*it).second;
 		
@@ -66,6 +63,16 @@ bool InputManager::GetButton( const std::string& a_button ) const {
 	}
 
 	return false;
+}
+
+std::pair<std::unordered_map<InputManager::Key, KeyCode>::const_iterator, std::unordered_map<InputManager::Key, KeyCode>::const_iterator> InputManager::GetKeysFromButton( const std::string& a_button ) const {
+	const Key hashed = HashString( a_button );
+
+	auto findResult = m_inputMap.equal_range( hashed );
+	if( findResult.first == findResult.second ) {
+		// TODO: warn that key is not in map
+	}
+	return findResult;
 }
 
 const InputManager::Key InputManager::HashString( const std::string& a_string ) const {
