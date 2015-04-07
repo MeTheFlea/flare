@@ -8,7 +8,7 @@ InputManager::InputManager() {
 }
 
 InputManager::~InputManager() {
-
+	
 }
 
 bool InputManager::GetKeyDown( const KeyCode& a_key ) const {

@@ -2,6 +2,7 @@
 #include "external/glfw.h"
 #include "core/gameBase.h"
 #include "core/inputManager.h"
+#include "core/timeManager.h"
 
 #define MapGLFWToInput( a, b ) case a: code = b; break;
 
@@ -30,6 +31,7 @@ namespace flare {
 		// run the main loop of the templated Game set in the constructor of the engine (this will call OnUpdate() and OnRender() on the game, and Reset() on the Input manager appropriately)
 		void Run() {
 			while( !glfwWindowShouldClose( m_pWindow ) ) {
+				Time.StartFrame();
 				glfwPollEvents();
 
 				m_game.OnUpdate();
