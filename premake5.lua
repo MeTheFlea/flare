@@ -37,6 +37,8 @@ project( "flare" )
 		debugenvs{ "PATH=%PATH%;extern/dll/Debug" }
 		libdirs{ "extern/lib/Debug" }
 	filter{ "configurations:Debug", "system:windows" }
+		links{ "vld" }
+		forceincludes{ "include/vld/vld.h" }
 		--links{ "glew32d", "assimpd" }
 
 
@@ -46,8 +48,9 @@ project( "flare" )
 	filter{ "configurations:OptimisedDebug or Release" }
 		defines{ "_NDEBUG" }
 		flags{ "OptimizeSpeed" }
+		debugenvs{ "PATH=%PATH%;extern/dll/Release" }
 		libdirs{ "extern/lib/Release" }
 		
 	filter{ "configurations:OptimisedDebug or Release", "system:windows" }
-		debugenvs{ "PATH=%PATH%;extern/dll/Release" }
+		
 		
