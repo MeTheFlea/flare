@@ -32,7 +32,7 @@ project( "flare" )
 
 	
 	filter{ "configurations:Debug" }
-		defines{ "_DEBUG" }
+		--defines{ "DEBUG" }
 		flags{ "Symbols" }
 		debugenvs{ "PATH=%PATH%;extern/dll/Debug" }
 		libdirs{ "extern/lib/Debug" }
@@ -46,7 +46,7 @@ project( "flare" )
 		flags{ "Symbols" }
 
 	filter{ "configurations:OptimisedDebug or Release" }
-		defines{ "_NDEBUG" }
+		defines{ "NDEBUG" }
 		flags{ "OptimizeSpeed" }
 		debugenvs{ "PATH=%PATH%;extern/dll/Release" }
 		libdirs{ "extern/lib/Release" }
