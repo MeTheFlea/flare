@@ -8,6 +8,7 @@ TimeManager::TimeManager() :
 	m_timescale( 1.0f ),	
 	m_deltaTime( 0.0f ),	
 	m_unscaledDeltaTime( 0.0f ),	
+	m_elapsedMilli( 0.0f ),
 	m_currentTime( std::chrono::high_resolution_clock::now() ) {
 	
 }
@@ -26,4 +27,8 @@ void TimeManager::StartFrame() {
 	std::chrono::duration<float> time = now - m_currentTime;
 	SetDeltaTime( time.count() );
 	m_currentTime = now;
+
+	typedef std::chrono::duration<float, std::milli> milliseconds;
+	
+	m_elapsedMilli += std::chrono::duration_cast<milliseconds>( time ).count();
 }

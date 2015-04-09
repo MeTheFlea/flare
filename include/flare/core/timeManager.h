@@ -15,7 +15,8 @@ namespace flare {
 
 		inline void SetTimescale( const float a_timescale ) { m_timescale = a_timescale; }
 
-
+		inline float GetElapsedSeconds() const { return m_elapsedMilli / 1000.0f; }
+		inline float GetElapsedMilliseconds() const { return m_elapsedMilli; }
 
 	private:
 		template <class TGame>
@@ -24,6 +25,7 @@ namespace flare {
 		float m_unscaledDeltaTime;
 		float m_deltaTime;
 		float m_timescale;
+		float m_elapsedMilli;
 		
 		void SetDeltaTime( const float a_deltaTime );
 		void StartFrame();
