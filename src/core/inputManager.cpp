@@ -65,7 +65,7 @@ bool InputManager::GetButton( const std::string& a_button ) const {
 	return false;
 }
 
-std::pair<std::unordered_map<InputManager::Key, KeyCode>::const_iterator, std::unordered_map<InputManager::Key, KeyCode>::const_iterator> InputManager::GetKeysFromButton( const std::string& a_button ) const {
+InputManager::ButtonKeyCodes InputManager::GetKeysFromButton( const std::string& a_button ) const {
 	const Key hashed = HashString( a_button );
 
 	auto findResult = m_inputMap.equal_range( hashed );
