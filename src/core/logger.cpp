@@ -18,23 +18,23 @@ Logger::~Logger() {
 
 }
 
-#ifndef NDEBUG
-void Logger::Debug( const char* a_message, ... ) {
-	fprintf( stderr, "%s|Debug\t| ", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
+#ifdef NDEBUG
+void Logger::Debug( const char*, ... ) {
+
+}
+#else
+void Logger::Debug( const char* a_message, ... ) { 
+	fprintf( stdout, "%s|Debug\t| ", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
 
 	va_list args;
 	va_start( args, a_message );
 	Write( a_message, args );
 	va_end( args );
 }
-#else
-void Logger::Debug( const char*, ... ) {
-
-}
 #endif
 
 void Logger::Info( const char* a_message, ... ) {
-	fprintf( stderr, "%s|Info\t| ", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
+	fprintf( stdout, "%s|Info\t| ", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
 
 	va_list args;
 	va_start( args, a_message );
@@ -43,7 +43,7 @@ void Logger::Info( const char* a_message, ... ) {
 }
 
 void Logger::Warning( const char* a_message, ... ) {
-	fprintf( stderr, "%s|WARN\t| \a", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
+	fprintf( stdout, "%s|WARN\t| \a", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
 
 	va_list args;
 	va_start( args, a_message );
@@ -52,7 +52,7 @@ void Logger::Warning( const char* a_message, ... ) {
 }
 
 void Logger::Fatal( const char* a_message, ... ) {
-	fprintf( stderr, "%s|FATAL\t| \a", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
+	fprintf( stdout, "%s|FATAL\t| \a", FormatTimeToString( Time.GetElapsedMilliseconds() ).c_str() );
 
 	va_list args;
 	va_start( args, a_message );
@@ -63,9 +63,9 @@ void Logger::Fatal( const char* a_message, ... ) {
 void Logger::Write( const char* a_message, const va_list& a_list ) {
 	//va_list args;
 	//va_start( args, a_message );
-	vfprintf( stderr, a_message, a_list );
+	vfprintf( stdout, a_message, a_list );
 	//va_end( args );
-	fprintf( stderr, "\n" );
+	fprintf( stdout, "\n" );
 }
 
 std::string Logger::FormatTimeToString( float a_timeElapsed ) {
