@@ -61,10 +61,7 @@ void Logger::Fatal( const char* a_message, ... ) {
 }
 
 void Logger::Write( const char* a_message, const va_list& a_list ) {
-	//va_list args;
-	//va_start( args, a_message );
 	vfprintf( stdout, a_message, a_list );
-	//va_end( args );
 	fprintf( stdout, "\n" );
 }
 

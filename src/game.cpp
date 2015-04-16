@@ -24,13 +24,10 @@ void Game::OnUpdate() {
 	}
 
 	if( Input.GetKeyDown( KeyCode::T ) ) {
-		//Time.SetTimescale( 0.5f );
+		//Time.SetTimescale( 0.5f );	
 	}
 	if( Input.GetKeyDown( KeyCode::Y ) ) {
-		Log.Debug( "%f", Time.GetElapsedSeconds() );
-		Log.Info( "%f", Time.GetElapsedSeconds() );
-		Log.Warning( "%f", Time.GetElapsedSeconds() );
-		Log.Fatal( "%f", Time.GetElapsedSeconds() );
+		flareassert( false, "test message" );
 	}
 }
 

@@ -19,3 +19,10 @@ namespace flare {
 }
 
 extern flare::Logger Log;
+
+#ifdef NDEBUG
+#define flareassert( condition, message )
+#else
+#define flareassert( condition, message ) \
+	if( !condition ) { Log.Fatal( "\n---------------\nASSERTION FAILED\nLINE: %i\nFUNCTION: %s\nMESSAGE: %s\n---------------", __LINE__, __FUNCTION__, message ); std::abort(); }
+#endif
