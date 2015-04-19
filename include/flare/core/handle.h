@@ -13,7 +13,6 @@ namespace flare {
 		Handle( T* a_pObject ) :
 			m_pObject( a_pObject ) {
 			AddHandle();
-			
 		}
 
 		Handle( const Handle<T>& a_other ) :
@@ -23,7 +22,7 @@ namespace flare {
 
 		void AddHandle() {
 			s_handles.insert( std::pair<T*, Handle<T>*>( m_pObject, this ) );
-			Log.Info( "added handle" );
+			Log.Debug( "added handle" );
 		}
 
 		void RemoveHandle() {
@@ -33,7 +32,7 @@ namespace flare {
 			while( it != findResult.second ) {
 				if( (*it).second == this ) {
 					it = s_handles.erase( it );
-					Log.Info( "deleted handle" );
+					Log.Debug( "deleted handle" );
 					break;
 				}
 				++it;
@@ -52,13 +51,35 @@ namespace flare {
 			return *this;
 		}
 
+		void SetObject( T* a_pObj ) {
+			m_pObject = a_pObj;
+		}
+
 		T* operator->() { return m_pObject; }
 		T* operator->() const { return m_pObject; }
 
 		T& operator*() { return *m_pObject; }
 		const T& operator*() const { return *m_pObject; }
 
+		bool operator==( T* a_pOther ) const {
+			return m_pObject == a_pOther;
+		}
+		bool operator!=( T* a_pOther ) const {
+			return m_pObject != a_pOther;
+		}
+
+		static void InvalidateHandles( T* a_obj ) {
+			auto findResultOld = s_handles.equal_range( a_obj );
+
+			for( auto it = findResultOld.first; it != findResultOld.second; ++it ) {
+				(*it).second->SetObject( nullptr );
+			}
+
+			s_handles.erase( a_obj );
+		}
+
 		static void UpdateHandles( T* a_oldAddr, T* a_newAddr ) {
+			if( s_handles.size() == 0 ) { return; }
 			auto findResultOld = s_handles.equal_range( a_oldAddr );
 			std::vector<Handle<T>*> oldVec;
 			std::vector<Handle<T>*> newVec;

@@ -34,7 +34,8 @@ void Game::OnUpdate() {
 		test.Foo();
 	}
 	if( Input.GetKeyDown( KeyCode::Y ) ) {
-		flareassert( false, "test message" );
+		//flareassert( false, "test message" );
+		test.Bar();
 	}
 }
 
