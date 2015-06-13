@@ -32,14 +32,12 @@ project( "flare" )
 
 	
 	filter{ "configurations:Debug" }
-		--defines{ "DEBUG" }
 		flags{ "Symbols" }
 		debugenvs{ "PATH=%PATH%;extern/dll/Debug" }
 		libdirs{ "extern/lib/Debug" }
 	filter{ "configurations:Debug", "system:windows" }
 		links{ "vld" }
 		forceincludes{ "include/vld/vld.h" }
-		--links{ "glew32d", "assimpd" }
 
 
 	filter{ "configurations:OptimisedDebug" }
@@ -49,8 +47,4 @@ project( "flare" )
 		defines{ "NDEBUG" }
 		flags{ "OptimizeSpeed" }
 		debugenvs{ "PATH=%PATH%;extern/dll/Release" }
-		libdirs{ "extern/lib/Release" }
-		
-	filter{ "configurations:OptimisedDebug or Release", "system:windows" }
-		
-		
+		libdirs{ "extern/lib/Release" }	

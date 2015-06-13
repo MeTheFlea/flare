@@ -1,4 +1,5 @@
 #include "core/inputManager.h"
+#include "core/logger.h"
 using namespace flare;
 
 InputManager Input;
@@ -70,7 +71,7 @@ InputManager::ButtonKeyCodes InputManager::GetKeysFromButton( const std::string&
 
 	auto findResult = m_inputMap.equal_range( hashed );
 	if( findResult.first == findResult.second ) {
-		// TODO: warn that key is not in map
+		Log.Warning( "Key: \"%s\" does not exist in the map!", a_button.c_str() );
 	}
 	return findResult;
 }

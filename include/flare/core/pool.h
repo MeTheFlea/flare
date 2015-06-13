@@ -5,6 +5,8 @@
 #include <new>
 
 namespace flare {
+	class Entity;
+
 	template<class T, int SIZE>
 	class Pool {
 	public:
@@ -29,6 +31,17 @@ namespace flare {
 			return handle;
 		}
 
+		Handle<T> FindFromEntity( Entity* a_pEntity ) {
+			for( int i = 0; i < m_freeIndex; ++i ) {
+				T* component = (T*)( &(m_pool[i]) );
+				if( component->m_pEntity == a_pEntity ) {
+					Handle<T> handle( component );
+					return handle;
+				}
+			}
+			return Handle<T>();
+		}
+
 		void Delete( T* a_obj ) {
 			if( a_obj == nullptr ) { return; }
 
@@ -49,8 +62,8 @@ namespace flare {
 			return m_freeIndex;
 		}
 
-		Handle<T> operator[]( int a_index ) {
-			return Handle<T>( m_pool[a_index] );
+		T& operator[]( int a_index ) {
+			return ( m_pool[a_index] );
 		}
 	private:
 		void Clear() {

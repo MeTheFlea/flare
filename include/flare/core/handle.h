@@ -15,8 +15,13 @@ namespace flare {
 			AddHandle();
 		}
 
+		Handle( const T* a_pObject ) :
+			m_pObject( a_pObject ) {
+			AddHandle();
+		}
+
 		Handle( const Handle<T>& a_other ) :
-			m_pObject( a_other.operator->() ) {
+			m_pObject( a_other.m_pObject ) {
 			AddHandle();
 		}
 
@@ -69,6 +74,7 @@ namespace flare {
 		}
 
 		static void InvalidateHandles( T* a_obj ) {
+			if( s_handles.size() == 0 ) { return; }
 			auto findResultOld = s_handles.equal_range( a_obj );
 
 			for( auto it = findResultOld.first; it != findResultOld.second; ++it ) {

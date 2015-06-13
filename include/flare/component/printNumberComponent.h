@@ -2,15 +2,15 @@
 #include "component/component.h"
 
 namespace flare {
-	class PrintNumberComponent : public Component<PrintNumberComponent, 20, false> {
+	class PrintNumberComponent : public Component<PrintNumberComponent, 20, true> {
 	public:
-		PrintNumberComponent() : m_number( 0 ) {}
+		PrintNumberComponent();
 		~PrintNumberComponent() {}
 
-		void PrintNumber();
+		void Update();
 
-		int m_number;
+		float m_time;
 	private:
-		
+		float m_timer;
 	};
 }
