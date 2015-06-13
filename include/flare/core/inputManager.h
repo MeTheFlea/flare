@@ -17,7 +17,7 @@ namespace flare {
 		~InputManager();
 
 		// This will add a mapping from a string to a KeyCode
-		void AddKeyMap( const std::string& a_map, const KeyCode& a_key );
+		void BindButton( const std::string& a_map, const KeyCode& a_key );
 		// This will remove a mapping from a string to a KeyCode
 		void RemoveKeyMap( const std::string& a_map, const KeyCode& a_key );
 
@@ -42,11 +42,10 @@ namespace flare {
 		bool m_keyState[(unsigned char)KeyCode::Count];
 		bool m_keyChange[(unsigned char)KeyCode::Count];
 
-		const Key HashString( const std::string& a_string ) const;
+		Key HashString( const std::string& a_string ) const;
 		void SetKey( const KeyCode& a_key, const bool a_value );
 		void Reset();
 
-		
 		ButtonKeyCodes GetKeysFromButton( const std::string& a_button ) const;
 
 		std::unordered_multimap<Key, KeyCode> m_inputMap;

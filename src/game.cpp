@@ -3,31 +3,42 @@
 #include "core/timeManager.h"
 #include "core/logger.h"
 
+#include "entity/entityTest.h"
 using namespace flare;
 
-Game::Game() {
+#include "component/printNumberComponent.h"
 
+EntityTest* test;
+EntityTest* test2;
+
+Handle<PrintNumberComponent> secondComp;
+
+Game::Game() {
+	test = new EntityTest();
+	test->GetComponent<PrintNumberComponent>()->m_time = 1.0f;
+	test2 = new EntityTest();
+	secondComp = test2->GetComponent<PrintNumberComponent>();
+	secondComp->m_time = 1.0f;
 }
 
 Game::~Game() {
+
 }
 
 void Game::OnInit() {
 	// init
-	Input.AddKeyMap( "Quit", KeyCode::ESCAPE );
+	Input.BindButton( "Quit", KeyCode::ESCAPE );
 }
 
 void Game::OnUpdate() {
+	Components::Update();
 	// update
 	if( Input.GetButtonDown( "Quit" ) ) {
 		Quit();
 	}
 
 	if( Input.GetKeyDown( KeyCode::T ) ) {
-		//Time.SetTimescale( 0.5f );	
-	}
-	if( Input.GetKeyDown( KeyCode::Y ) ) {
-		flareassert( false, "test message" );
+		secondComp->m_time = 5.0f;
 	}
 }
 
@@ -37,4 +48,6 @@ void Game::OnRender() {
 
 void Game::OnQuit() {
 	// clean up
+	delete test;
+	delete test2;
 }

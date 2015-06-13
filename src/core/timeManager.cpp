@@ -5,9 +5,9 @@ using namespace flare;
 TimeManager Time;
 
 TimeManager::TimeManager() :
-	m_timescale( 1.0f ),	
-	m_deltaTime( 0.0f ),	
-	m_unscaledDeltaTime( 0.0f ),	
+	m_unscaledDeltaTime( 0.0f ),
+	m_deltaTime( 0.0f ),
+	m_timescale( 1.0f ),
 	m_elapsedMilli( 0.0f ),
 	m_currentTime( std::chrono::high_resolution_clock::now() ) {
 	

@@ -1,4 +1,5 @@
 #include "core/inputManager.h"
+#include "core/logger.h"
 using namespace flare;
 
 InputManager Input;
@@ -70,12 +71,12 @@ InputManager::ButtonKeyCodes InputManager::GetKeysFromButton( const std::string&
 
 	auto findResult = m_inputMap.equal_range( hashed );
 	if( findResult.first == findResult.second ) {
-		// TODO: warn that key is not in map
+		Log.Warning( "Key: \"%s\" does not exist in the map!", a_button.c_str() );
 	}
 	return findResult;
 }
 
-const InputManager::Key InputManager::HashString( const std::string& a_string ) const {
+InputManager::Key InputManager::HashString( const std::string& a_string ) const {
 	static std::hash<std::string> hashFunc;
 	return hashFunc( a_string );
 }
@@ -91,7 +92,7 @@ void InputManager::Reset() {
 	memset( m_keyChange, false, sizeof( m_keyChange ) );
 }
 
-void InputManager::AddKeyMap( const std::string& a_map, const KeyCode& a_key ) {
+void InputManager::BindButton( const std::string& a_map, const KeyCode& a_key ) {
 	const Key hashed = HashString( a_map );
 	bool duplicate = false;
 	
