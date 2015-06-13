@@ -20,6 +20,8 @@ namespace flare {
 
 		Handle<T> New() {
 			flareassert( m_freeIndex < SIZE, "component pool is full!" );
+			
+			// using placement new to plop down a new component inside the pool
 			T* component = new( &m_pool[m_freeIndex++] ) T();
 
 			Handle<T> handle( component );
@@ -32,22 +34,30 @@ namespace flare {
 
 			flareassert( m_freeIndex > 0, "deleting empty pool!" );
 
-			int index = (int)a_obj - (int)m_pool;
+			// finding the index of the object relative to the start of the pool
+			int index = *((int*)(a_obj)) - *((int*)(m_pool));
 			
+			// need to manually the destructor on the object
 			a_obj->~T();
+
+
 			Handle<T>::InvalidateHandles( a_obj );
 			Swap( index, --m_freeIndex );
 		}
+
+		int GetSize() const { 
+			return m_freeIndex;
+		}
+
+		Handle<T> operator[]( int a_index ) {
+			return Handle<T>( m_pool[a_index] );
+		}
 	private:
-		T* m_pool;
-
-		std::vector<Handle<T>> m_handles;
-
-		int m_freeIndex;
-
 		void Clear() {
 			for( int i = 0; i < m_freeIndex; ++i ) {
+				Handle<T>::InvalidateHandles( &m_pool[i] );
 				(&m_pool[i])->~T();
+				
 			}
 			m_freeIndex = 0;
 		}
@@ -62,12 +72,12 @@ namespace flare {
 			tmp = obj1;
 			obj1 = obj2;
 			obj2 = tmp;
-			//(tmp)->~T();
-			//memcpy( tmp, obj1, sizeof( T ) );
-			//memcpy( obj1, obj2, sizeof( T ) );
-			//memcpy( obj2, tmp, sizeof( T ) );
-
 			Handle<T>::UpdateHandles( &obj1, &obj2 );
 		}
+
+		// fixed size array of objects in the pool
+		T* m_pool;
+
+		int m_freeIndex;
 	};
 }

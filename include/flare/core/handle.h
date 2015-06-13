@@ -76,6 +76,7 @@ namespace flare {
 			}
 
 			s_handles.erase( a_obj );
+			Log.Debug( "deleted handle" );
 		}
 
 		static void UpdateHandles( T* a_oldAddr, T* a_newAddr ) {

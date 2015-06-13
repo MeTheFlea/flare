@@ -17,7 +17,7 @@ namespace flare {
 		~InputManager();
 
 		// This will add a mapping from a string to a KeyCode
-		void AddKeyMap( const std::string& a_map, const KeyCode& a_key );
+		void BindButton( const std::string& a_map, const KeyCode& a_key );
 		// This will remove a mapping from a string to a KeyCode
 		void RemoveKeyMap( const std::string& a_map, const KeyCode& a_key );
 

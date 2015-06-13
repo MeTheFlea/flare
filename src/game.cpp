@@ -3,24 +3,25 @@
 #include "core/timeManager.h"
 #include "core/logger.h"
 
-#include "entity/entity.h"
-
+#include "entity/entityTest.h"
 using namespace flare;
 
-Entity test;
+EntityTest* test;
 
 Game::Game() {
-
+	test = new EntityTest[2];
+	for( int i = 0; i < 2; ++i ) {
+		test[i].SetNumber( i );
+	}
 }
 
 Game::~Game() {
+
 }
 
 void Game::OnInit() {
 	// init
-	Input.AddKeyMap( "Quit", KeyCode::ESCAPE );
-
-	
+	Input.BindButton( "Quit", KeyCode::ESCAPE );
 }
 
 void Game::OnUpdate() {
@@ -29,13 +30,9 @@ void Game::OnUpdate() {
 		Quit();
 	}
 
-	if( Input.GetKeyDown( KeyCode::T ) ) {
-		//Time.SetTimescale( 0.5f );	
-		test.Foo();
-	}
 	if( Input.GetKeyDown( KeyCode::Y ) ) {
+		test[0].DeleteComponent();
 		//flareassert( false, "test message" );
-		test.Bar();
 	}
 }
 
@@ -45,4 +42,5 @@ void Game::OnRender() {
 
 void Game::OnQuit() {
 	// clean up
+	delete[] test;
 }

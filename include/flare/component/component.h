@@ -1,6 +1,7 @@
 #pragma once
 #include "core/handle.h"
 #include "core/pool.h"
+#include "core/timeManager.h"
 
 namespace flare {
 	class Entity;
@@ -13,33 +14,39 @@ namespace flare {
 		virtual ~ComponentBase() {}
 	};
 
-	template<class T, int SIZE>
+	class Components {
+	public:
+		static void Update();
+
+		template<class T>
+		static void RegisterTypeUpdate() {
+
+		}
+	private:
+		
+	};
+
+	template<class T, int SIZE, bool UPDATE>
 	class Component : public ComponentBase {
 	public:
-
 		static Pool<T, SIZE> s_pPool;
-	protected:
-		Component() {}
-		virtual ~Component() { }
 
-		
+		static void UpdateAll() {
+			int components = s_pPool.GetSize();
+			for( int i = 0; i < components; ++i ) {
+				//s_pPool[i]
+			}
+		}
+	protected:
+		Component() {
+			if( UPDATE ) {
+				Components::RegisterTypeUpdate<T>();
+			}
+		}
+
+		virtual ~Component() {}
 	};
 
-	class TestComponent : public Component<TestComponent, 20> {
-	public:
-		TestComponent() {
-			test = 0;
-		}
-		void Foo() {
-			Log.Info( "%i", test );
-		}
-		int test;
-	protected:
-		
-	};
-
-	template<class T, int SIZE>
-	Pool<T, SIZE> Component<T, SIZE>::s_pPool;
-
-	
+	template<class T, int SIZE, bool UPDATE>
+	Pool<T, SIZE> Component<T, SIZE, UPDATE>::s_pPool;
 }

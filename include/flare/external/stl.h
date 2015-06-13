@@ -4,6 +4,7 @@
 #include <string>
 #else 
 #include <string.h>
+#include <cstdarg>
 #endif
 #include <vector>
 #include <map>

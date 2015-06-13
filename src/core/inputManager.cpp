@@ -91,7 +91,7 @@ void InputManager::Reset() {
 	memset( m_keyChange, false, sizeof( m_keyChange ) );
 }
 
-void InputManager::AddKeyMap( const std::string& a_map, const KeyCode& a_key ) {
+void InputManager::BindButton( const std::string& a_map, const KeyCode& a_key ) {
 	const Key hashed = HashString( a_map );
 	bool duplicate = false;
 	
