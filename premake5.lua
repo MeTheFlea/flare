@@ -19,7 +19,7 @@ project( "flare" )
 	includedirs{ "%{_WORKING_DIR}/extern/include", "include/flare" }
 
 
-	links{ "glfw3" }
+	links{ "glfw" }
 	flags{ "ExtraWarnings" }
 
 	filter{ "system:windows" }
