@@ -3,3 +3,6 @@ bin/
 extern/dll/
 extern/lib/
 log.txt
+*.sublime*
+premake5
+premake5.exe
