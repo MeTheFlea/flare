@@ -75,7 +75,7 @@ InputManager::ButtonKeyCodes InputManager::GetKeysFromButton( const std::string&
 	return findResult;
 }
 
-const InputManager::Key InputManager::HashString( const std::string& a_string ) const {
+InputManager::Key InputManager::HashString( const std::string& a_string ) const {
 	static std::hash<std::string> hashFunc;
 	return hashFunc( a_string );
 }

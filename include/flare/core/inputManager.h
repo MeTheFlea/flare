@@ -42,7 +42,7 @@ namespace flare {
 		bool m_keyState[(unsigned char)KeyCode::Count];
 		bool m_keyChange[(unsigned char)KeyCode::Count];
 
-		const Key HashString( const std::string& a_string ) const;
+		Key HashString( const std::string& a_string ) const;
 		void SetKey( const KeyCode& a_key, const bool a_value );
 		void Reset();
 
