@@ -1,4 +1,4 @@
 #include "component/component.h"
 
-std::vector<std::function<void()>> flare::Components::m_updateFunctions;
+std::vector<std::function<void()>> flare::Components::s_updateFunctions;
 

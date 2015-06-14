@@ -9,22 +9,22 @@ namespace flare {
 	class Components {
 	public:
 		static void Update() { 
-			for( unsigned int i = 0; i < m_updateFunctions.size(); ++i ) {
-				m_updateFunctions[i]();
+			for( unsigned int i = 0; i < s_updateFunctions.size(); ++i ) {
+				s_updateFunctions[i]();
 			}
 		}
 
 		template<class T>
 		static void RegisterTypeUpdate( std::function<void()> a_updateFunction ) {
-			m_updateFunctions.push_back( a_updateFunction );
+			s_updateFunctions.push_back( a_updateFunction );
 		}
 	private:
-		static std::vector<std::function<void()>> m_updateFunctions;
+		static std::vector<std::function<void()>> s_updateFunctions;
 	};
 
 	class ComponentBase {
 	public:
-		void SetEntity(Entity* a_pEntity) {
+		void SetEntity( Entity* a_pEntity ) {
 			m_pEntity = a_pEntity;
 		}
 

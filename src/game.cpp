@@ -8,16 +8,16 @@ using namespace flare;
 
 #include "component/printNumberComponent.h"
 
-EntityTest* test;
-EntityTest* test2;
+Entity* test;
+Entity* test2;
 
 Handle<PrintNumberComponent> secondComp;
 
 Game::Game() {
 	test = new EntityTest();
 	test->GetComponent<PrintNumberComponent>()->m_time = 1.0f;
-	test2 = new EntityTest();
-	secondComp = test2->GetComponent<PrintNumberComponent>();
+	test2 = new Entity();
+	secondComp = test2->AddComponent<PrintNumberComponent>();
 	secondComp->m_time = 1.0f;
 }
 
