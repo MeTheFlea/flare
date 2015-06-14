@@ -9,16 +9,9 @@ using namespace flare;
 #include "component/printNumberComponent.h"
 
 Entity* test;
-Entity* test2;
-
-Handle<PrintNumberComponent> secondComp;
 
 Game::Game() {
-	test = new EntityTest();
-	test->GetComponent<PrintNumberComponent>()->m_time = 1.0f;
-	test2 = new Entity();
-	secondComp = test2->AddComponent<PrintNumberComponent>();
-	secondComp->m_time = 1.0f;
+	test = Entity::Create<EntityTest>();
 }
 
 Game::~Game() {
@@ -38,7 +31,8 @@ void Game::OnUpdate() {
 	}
 
 	if( Input.GetKeyDown( KeyCode::T ) ) {
-		secondComp->m_time = 5.0f;
+		Entity::Destroy( test );
+		//test2->DestroyComponent( secondComp );
 	}
 }
 
@@ -48,6 +42,5 @@ void Game::OnRender() {
 
 void Game::OnQuit() {
 	// clean up
-	delete test;
-	delete test2;
+	Entity::CleanUp();
 }

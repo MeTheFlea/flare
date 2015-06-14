@@ -4,7 +4,7 @@
 using namespace flare;
 
 PrintNumberComponent::PrintNumberComponent() : 
-	m_time( 0.0f ),
+	m_time( 1.0f ),
 	m_timer( 0.0f ) {
 
 }

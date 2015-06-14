@@ -13,7 +13,6 @@ namespace flare {
 		Pool() :
 			m_freeIndex( 0 ) {
 			m_pool = (T*)( malloc( sizeof( T ) * ( SIZE + 1 ) ) );
-
 		}
 		~Pool() {
 			Clear();
@@ -42,20 +41,19 @@ namespace flare {
 			return Handle<T>();
 		}
 
-		void Delete( T* a_obj ) {
+		void Delete( T* const a_obj ) {
 			if( a_obj == nullptr ) { return; }
 
 			flareassert( m_freeIndex > 0, "deleting empty pool!" );
 
 			// finding the index of the object relative to the start of the pool
-			int index = *((int*)(a_obj)) - *((int*)(m_pool));
-			
-			// need to manually the destructor on the object
-			a_obj->~T();
-
+			int index = ( ((T*)a_obj) - ((T*)m_pool) );
 
 			Handle<T>::InvalidateHandles( a_obj );
 			Swap( index, --m_freeIndex );
+			
+			// need to manually the destructor on the object
+			( &m_pool[m_freeIndex] )->~T();
 		}
 
 		int GetSize() const { 
@@ -70,7 +68,6 @@ namespace flare {
 			for( int i = 0; i < m_freeIndex; ++i ) {
 				Handle<T>::InvalidateHandles( &m_pool[i] );
 				(&m_pool[i])->~T();
-				
 			}
 			m_freeIndex = 0;
 		}

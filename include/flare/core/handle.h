@@ -8,7 +8,7 @@ namespace flare {
 	public:
 		Handle() :
 			m_pObject( nullptr ) {
-
+			
 		}
 		Handle( T* a_pObject ) :
 			m_pObject( a_pObject ) {
