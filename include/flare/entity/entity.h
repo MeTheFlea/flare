@@ -25,13 +25,5 @@ namespace flare {
 		~Entity();
 	protected:
 		
-
-	private:
-		typedef size_t Key;
-		template<class T>
-		Key HashType() const {
-			static std::hash<std::string> hashFunc;
-			Key hashed = hashFunc( typeid( T ).name() );
-		}
 	};
 }
