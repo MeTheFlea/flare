@@ -1,8 +1,14 @@
 #pragma once
+#include "external/opengl.h"
 #include "external/glfw.h"
 #include "core/gameBase.h"
 #include "core/inputManager.h"
 #include "core/timeManager.h"
+
+#include "entity/entity.h"
+#include "component/component.h"
+
+#include "core/renderer.h"
 
 #define MapGLFWToInput( a, b ) case a: code = b; break;
 
@@ -15,14 +21,34 @@ namespace flare {
 				glfwTerminate();
 			}
 
+			//glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
+			//glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+			//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
+			//glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
+
 			m_pWindow = glfwCreateWindow( a_windowWidth, a_windowHeight, a_windowTitle, NULL, NULL );
 			if( !m_pWindow ) {
 				glfwTerminate();
 			}
-
 			glfwMakeContextCurrent( m_pWindow );
-			glfwSwapInterval( 1 );
 
+			if( gl3wInit() ) {
+				Log.Fatal( "Failed to load gl3w" );
+			}
+			
+			GLint majorVer, minorVer;
+			glGetIntegerv( GL_MAJOR_VERSION, &majorVer );
+			glGetIntegerv( GL_MINOR_VERSION, &minorVer );
+
+			Log.Info( "OpenGL Version: %i.%i", (int)majorVer, (int)minorVer );
+
+			if( majorVer < 3 || ( majorVer >= 3 && minorVer < 3 ) ) {
+				Log.Fatal( "Your OpenGL version is too low!" );
+			}
+
+			
+			
+			glfwSwapInterval( 1 );
 			glfwSetKeyCallback( m_pWindow, KeyCallback );
 
 			m_game.OnInit();
@@ -30,17 +56,26 @@ namespace flare {
 
 		// run the main loop of the templated Game set in the constructor of the engine (this will call OnUpdate() and OnRender() on the game, and Reset() on the Input manager appropriately)
 		void Run() {
+			Renderer* renderer = Renderer::GetInstance();
 			while( !glfwWindowShouldClose( m_pWindow ) ) {
 				Time.StartFrame();
 				glfwPollEvents();
 
+				Components::Update();
 				m_game.OnUpdate();
+
+				renderer->ClearFrame();
 				m_game.OnRender();
 
 				Input.Reset();
 				glfwSwapBuffers( m_pWindow );
-				if( m_game.m_quit ) { glfwSetWindowShouldClose( m_pWindow, true ); }
+				if( m_game.m_quit ) { 
+					glfwSetWindowShouldClose( m_pWindow, true ); 
+				}
 			}
+			m_game.OnQuit();
+			Entity::CleanUp();
+			delete renderer;
 		}
 
 		static void KeyCallback( GLFWwindow*, int a_key, int, int a_action, int ) {
@@ -94,8 +129,6 @@ namespace flare {
 		}
 		
 		~Engine() {
-			m_game.OnQuit();
-
 			glfwDestroyWindow( m_pWindow );
 			glfwTerminate();
 		}

@@ -8,7 +8,7 @@ project( "flare" )
 	targetdir( "bin/%{cfg.buildcfg}" )
 	debugdir( "_project/.." )
 
-	files{ "src/**.cpp", "src/**.h", "include/flare/**.h" }
+	files{ "src/**.cpp", "src/**.c", "src/**.h", "include/flare/**.h" }
 	vpaths{ 
 		["*"] = "src",
 	}
