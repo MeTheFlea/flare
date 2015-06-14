@@ -3,7 +3,7 @@
 
 class Game : public GameBase {
 public:
-	
+		
 protected:
 	template <class TGame>
 	friend class flare::Engine;
@@ -17,5 +17,5 @@ protected:
 	Game() {}
 	~Game() {}
 private:
-
+	void InitKeyBindings();
 };

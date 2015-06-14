@@ -7,6 +7,11 @@
 namespace flare {
 	class Entity;
 
+	enum ComponentQueue : unsigned int {
+		UPDATE = ( 1 << 0 ),
+		RENDER = ( 1 << 1 )
+	};
+
 	class ComponentBase {
 	public:
 		void SetEntity( Entity* a_pEntity ) {
@@ -14,6 +19,7 @@ namespace flare {
 		}
 
 		virtual void Update() {}
+		virtual void Render() {}
 
 		Entity* m_pEntity;
 
@@ -36,10 +42,23 @@ namespace flare {
 				s_updateFunctions[i]();
 			}
 		}
+		static void Render() { 
+			for( unsigned int i = 0; i < s_renderFunctions.size(); ++i ) {
+				s_renderFunctions[i]();
+			}
+		}
 
-		template<class T>
-		static void RegisterTypeUpdate( std::function<void()> a_updateFunction ) {
-			s_updateFunctions.push_back( a_updateFunction );
+		template<ComponentQueue T>
+		static void RegisterType( std::function<void()> a_function ) {}
+		
+		template<>
+		static void RegisterType<ComponentQueue::UPDATE>( std::function<void()> a_function ) {
+			s_updateFunctions.push_back( a_function );
+		}
+
+		template<>
+		static void RegisterType<ComponentQueue::RENDER>( std::function<void()> a_function ) {
+			s_renderFunctions.push_back( a_function );
 		}
 	protected:
 		friend class Entity;
@@ -49,30 +68,11 @@ namespace flare {
 		}
 	private:
 		static std::vector<std::function<void()>> s_updateFunctions;
+		static std::vector<std::function<void()>> s_renderFunctions;
 	};
 
-
-	template<class T, int SIZE, bool UPDATE>
-	class Component : public ComponentBase {};
-
-	template<class T, int SIZE>
-	class Component<T, SIZE, false> : public ComponentBase {
-	public:
-		static Pool<T, SIZE> s_pPool;
-
-	protected:
-		Component() {}
-		virtual ~Component() {}
-
-		void RemoveFromPool() {
-			s_pPool.Delete( (T*)this );
-		}
-	};
-	template<class T, int SIZE>
-	Pool<T, SIZE> Component<T, SIZE, false>::s_pPool;
-
-	template<class T, int SIZE>
-	class Component<T, SIZE, true> : public ComponentBase {
+	template<class T, int SIZE, int FLAGS>
+	class Component : public ComponentBase {
 	public:
 		static Pool<T, SIZE> s_pPool;
 
@@ -83,11 +83,24 @@ namespace flare {
 			}
 		}
 
+		static void RenderAll() {
+			int components = s_pPool.GetSize();
+			for( int i = 0; i < components; ++i ) {
+				s_pPool[i].Render();
+			}
+		}
+
 	protected:
 		Component() {
 			static bool registered = false;
 			if( !registered ) {
-				Components::RegisterTypeUpdate<T>( std::function<void()>( &Component<T, SIZE, true>::UpdateAll ) );
+				int flags = FLAGS;
+				if( flags & ComponentQueue::UPDATE ) {
+					Components::RegisterType<ComponentQueue::UPDATE>( std::function<void()>( &Component<T, SIZE, FLAGS>::UpdateAll ) );
+				}
+				if( flags & ComponentQueue::RENDER ) {
+					Components::RegisterType<ComponentQueue::RENDER>( std::function<void()>( &Component<T, SIZE, FLAGS>::RenderAll ) );
+				}
 				registered = true;
 			}
 		}
@@ -98,7 +111,6 @@ namespace flare {
 			s_pPool.Delete( (T*)this );
 		}
 	};
-
-	template<class T, int SIZE>
-	Pool<T, SIZE> Component<T, SIZE, true>::s_pPool;
+	template<class T, int SIZE, int FLAGS>
+	Pool<T, SIZE> Component<T, SIZE, FLAGS>::s_pPool;
 }

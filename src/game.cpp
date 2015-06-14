@@ -4,16 +4,22 @@
 #include "core/logger.h"
 
 #include "core/renderer.h"
+#include "component/meshComponent.h"
+
+#include "entity/entity.h"
 
 using namespace flare;
 
-Renderer* m_renderer;
+Renderer* g_renderer;
 
 void Game::OnInit() {
-	m_renderer = Renderer::GetInstance();
-	m_renderer->SetClearColour( 0.1f, 0.1f, 0.2f );
+	g_renderer = Renderer::GetInstance();
+	g_renderer->SetClearColour( 0.1f, 0.2f, 0.1f );
 
-	// init
+	InitKeyBindings();
+}
+
+void Game::InitKeyBindings() {
 	Input.BindButton( "Quit", KeyCode::ESCAPE );
 }
 
