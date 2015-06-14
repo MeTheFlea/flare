@@ -9,6 +9,7 @@ namespace flare {
 
 		void Update();
 
+		int m_number;
 		float m_time;
 	private:
 		float m_timer;

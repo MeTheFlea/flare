@@ -12,6 +12,6 @@ PrintNumberComponent::PrintNumberComponent() :
 void PrintNumberComponent::Update() {
 	if( ( m_timer += Time.GetDeltaTime() ) > m_time ) {
 		m_timer -= m_time;
-		Log.Debug( "Tick" );
+		Log.Debug( "%i", m_number );
 	}
 }

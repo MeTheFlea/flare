@@ -16,12 +16,17 @@ namespace flare {
 		}
 
 		template<class T>
-		void DestroyComponent( Handle<T>& a_component ) {
+		void DestroyComponent( Handle<T> a_component ) {
 			auto findResult = std::find( m_components.begin(), m_components.end(), a_component.operator->() );
 			if( findResult != m_components.end() ) {
 				Components::Delete( a_component.operator->() );
 				m_components.erase( findResult );
 			}	
+		}
+
+		template<class T>
+		void DestroyComponent() {
+			DestroyComponent( GetComponent<T>() );
 		}
 
 		template<class T>
@@ -51,6 +56,7 @@ namespace flare {
 				a_pEntity = nullptr;
 			}
 		}
+
 	protected:
 		Entity();
 		virtual ~Entity();
