@@ -60,13 +60,6 @@ namespace flare {
 	public:
 		static Pool<T, SIZE> s_pPool;
 
-		static void UpdateAll() {
-			int components = s_pPool.GetSize();
-			for( int i = 0; i < components; ++i ) {
-				s_pPool[i].Update();
-			}
-		}
-
 	protected:
 		Component() {}
 		virtual ~Component() {}

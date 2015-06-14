@@ -16,7 +16,8 @@ namespace flare {
 		}
 
 		template<class T>
-		void DestroyComponent( Handle<T> a_component ) {
+		void DestroyComponent( Handle<T>& a_component ) {
+			if( a_component == nullptr ) { return; }
 			auto findResult = std::find( m_components.begin(), m_components.end(), a_component.operator->() );
 			if( findResult != m_components.end() ) {
 				Components::Delete( a_component.operator->() );

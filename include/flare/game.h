@@ -3,9 +3,7 @@
 
 class Game : public GameBase {
 public:
-	Game();
-	~Game();
-
+	
 protected:
 	template <class TGame>
 	friend class flare::Engine;
@@ -16,6 +14,8 @@ protected:
 
 	void OnQuit();
 
+	Game() {}
+	~Game() {}
 private:
 
 };

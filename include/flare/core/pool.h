@@ -79,9 +79,13 @@ namespace flare {
 			
 			T& tmp = m_pool[SIZE];
 			
-			tmp = obj1;
-			obj1 = obj2;
-			obj2 = tmp;
+			memcpy( &tmp, &obj1, sizeof( T ) );
+			memcpy( &obj1, &obj2, sizeof( T ) );
+			memcpy( &obj2, &tmp, sizeof( T ) );
+
+			//tmp = obj1;
+			//obj1 = obj2;
+			//obj2 = tmp;
 			Handle<T>::UpdateHandles( &obj1, &obj2 );
 		}
 
