@@ -22,17 +22,15 @@ namespace flare {
 		virtual void Render() {}
 
 		Entity* m_pEntity;
-
-		
 	protected:
 		friend class Components;
-		ComponentBase() : m_pEntity( nullptr ) {}
+		ComponentBase() : 
+			m_pEntity( nullptr ) {
+		}
+
 		virtual ~ComponentBase() {}
 
-		virtual void RemoveFromPool() {
-			
-		}
-		
+		virtual void RemoveFromPool() {}
 	};
 
 	class Components {

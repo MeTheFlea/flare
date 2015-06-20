@@ -2,6 +2,11 @@
 #include "external/opengl.h"
 using namespace flare;
 
+Renderer_OpenGL::Renderer_OpenGL() :
+	Renderer() {
+	m_api = GraphicsAPI::OpenGL;
+}
+
 void Renderer_OpenGL::ClearFrame() {
 	glClear( GL_COLOR_BUFFER_BIT );
 }

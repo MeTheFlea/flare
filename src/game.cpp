@@ -12,9 +12,14 @@ using namespace flare;
 
 Renderer* g_renderer;
 
+Entity* g_entity = nullptr;
+
 void Game::OnInit() {
 	g_renderer = Renderer::GetInstance();
 	g_renderer->SetClearColour( 0.1f, 0.2f, 0.1f );
+
+	g_entity = Entity::Create<Entity>();
+	g_entity->AddComponent<MeshComponent>();
 
 	InitKeyBindings();
 }

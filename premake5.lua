@@ -19,7 +19,7 @@ project( "flare" )
 	includedirs{ "%{_WORKING_DIR}/extern/include", "include/flare" }
 
 
-	links{ "glfw" }
+	links{ "glfw", "assimp" }
 	flags{ "ExtraWarnings" }
 
 	filter{ "system:windows" }
@@ -37,7 +37,7 @@ project( "flare" )
 		libdirs{ "extern/lib/Debug" }
 	filter{ "configurations:Debug", "system:windows" }
 		links{ "vld" }
-		forceincludes{ "include/vld/vld.h" }
+		forceincludes{ "%{_WORKING_DIR}/extern/include/vld/vld.h" }
 
 
 	filter{ "configurations:OptimisedDebug" }

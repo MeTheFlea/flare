@@ -5,7 +5,8 @@ using namespace flare;
 
 Renderer* Renderer::s_instance = nullptr;
 
-Renderer::Renderer() {
+Renderer::Renderer() :
+	m_api( GraphicsAPI::Unknown ) {
 
 }
 
