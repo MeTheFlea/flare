@@ -79,10 +79,10 @@ namespace flare {
 
 			for( auto it = findResultOld.first; it != findResultOld.second; ++it ) {
 				(*it).second->SetObject( nullptr );
+				Log.Debug( "invalidated handle" );
 			}
 
 			s_handles.erase( a_obj );
-			Log.Debug( "deleted handle" );
 		}
 
 		static void UpdateHandles( T* a_oldAddr, T* a_newAddr ) {
@@ -112,6 +112,7 @@ namespace flare {
 			for( auto it = newVec.begin(); it != newVec.end(); ++it ) {
 				(*it)->m_pObject = a_oldAddr;
 				s_handles.insert( std::pair<T*, Handle<T>*>( a_oldAddr, (*it) ) );
+				Log.Debug( "updated handle" );
 			}
 		}
 	private:

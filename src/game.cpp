@@ -18,8 +18,11 @@ void Game::OnInit() {
 	g_renderer = Renderer::GetInstance();
 	g_renderer->SetClearColour( 0.1f, 0.2f, 0.1f );
 
-	g_entity = Entity::Create<Entity>();
-	g_entity->AddComponent<MeshComponent>();
+	//g_entity = Entity::Create<Entity>();
+	for( int i = 0; i < 21; ++i ) {
+		Entity* entity = Entity::Create<Entity>();
+		entity->AddComponent<MeshComponent>()->m_number = i;
+	}
 
 	InitKeyBindings();
 }

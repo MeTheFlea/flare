@@ -2,7 +2,7 @@
 #include "component/component.h"
 
 namespace flare {
-	class MeshComponent : public Component<MeshComponent, 20, ComponentQueue::UPDATE | ComponentQueue::RENDER> {
+	class MeshComponent : public Component<MeshComponent, ComponentQueue::UPDATE | ComponentQueue::RENDER> {
 	public:
 		MeshComponent();
 		~MeshComponent();
@@ -10,6 +10,9 @@ namespace flare {
 		void Update();
 		void Render();
 
+		int m_number;
+		float m_timer;
+		float m_time;
 	private:
 
 	};

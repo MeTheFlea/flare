@@ -69,10 +69,10 @@ namespace flare {
 		static std::vector<std::function<void()>> s_renderFunctions;
 	};
 
-	template<class T, int SIZE, int FLAGS>
+	template<class T, int FLAGS>
 	class Component : public ComponentBase {
 	public:
-		static Pool<T, SIZE> s_pPool;
+		static Pool<T> s_pPool;
 
 		static void UpdateAll() {
 			int components = s_pPool.GetSize();
@@ -94,10 +94,10 @@ namespace flare {
 			if( !registered ) {
 				int flags = FLAGS;
 				if( flags & ComponentQueue::UPDATE ) {
-					Components::RegisterType<ComponentQueue::UPDATE>( std::function<void()>( &Component<T, SIZE, FLAGS>::UpdateAll ) );
+					Components::RegisterType<ComponentQueue::UPDATE>( std::function<void()>( &Component<T, FLAGS>::UpdateAll ) );
 				}
 				if( flags & ComponentQueue::RENDER ) {
-					Components::RegisterType<ComponentQueue::RENDER>( std::function<void()>( &Component<T, SIZE, FLAGS>::RenderAll ) );
+					Components::RegisterType<ComponentQueue::RENDER>( std::function<void()>( &Component<T, FLAGS>::RenderAll ) );
 				}
 				registered = true;
 			}
@@ -109,6 +109,6 @@ namespace flare {
 			s_pPool.Delete( (T*)this );
 		}
 	};
-	template<class T, int SIZE, int FLAGS>
-	Pool<T, SIZE> Component<T, SIZE, FLAGS>::s_pPool;
+	template<class T, int FLAGS>
+	Pool<T> Component<T, FLAGS>::s_pPool;
 }

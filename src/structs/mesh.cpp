@@ -15,4 +15,6 @@ Mesh* Mesh::LoadMesh() {
 			Log.Debug( "openGL mesh" );
 		break;
 	}
+
+	return nullptr;
 }
