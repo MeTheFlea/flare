@@ -1,20 +1,24 @@
 #include "structs/mesh.h"
 #include "core/renderer.h"
-#include <assimp/Importer.hpp>
 #include "core/logger.h"
+#include "structs/mesh_openGL.h"
 using namespace flare;
 
-Mesh::Mesh() {
-	
+Mesh::Mesh() :
+	m_mesh( nullptr ) {
+
 }
 
-Mesh* Mesh::LoadMesh() {
-	Renderer::GraphicsAPI api = Renderer::GetGraphicsAPI();
-	switch( api ) {
+Mesh::~Mesh() {
+	delete m_mesh;
+}
+
+void Mesh::Init( Renderer::GraphicsAPI a_api ) {
+	switch( a_api ) {
 		case Renderer::GraphicsAPI::OpenGL:
-			Log.Debug( "openGL mesh" );
+			m_mesh = new Mesh_OpenGL();
 		break;
 	}
 
-	return nullptr;
+	m_mesh->Refresh( *this );
 }

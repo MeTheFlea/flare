@@ -69,6 +69,7 @@ namespace flare {
 
 				renderer->ClearFrame();
 				Components::Render();
+				renderer->Render();
 				m_game.OnRender();
 
 				Input.Reset();

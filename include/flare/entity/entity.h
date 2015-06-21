@@ -6,6 +6,7 @@ namespace flare {
 	public:
 		template<class T>
 		Handle<T> AddComponent() {
+			static_assert(std::is_base_of<ComponentBase, T>::value, "You can only add components!" );
 			Handle<T> retVal = T::s_pPool.New();
 			retVal->SetEntity( this );
 			

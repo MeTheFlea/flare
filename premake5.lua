@@ -19,7 +19,7 @@ project( "flare" )
 	includedirs{ "%{_WORKING_DIR}/extern/include", "include/flare" }
 
 
-	links{ "glfw", "assimp" }
+	links{ "glfw" }
 	flags{ "ExtraWarnings" }
 
 	filter{ "system:windows" }
@@ -36,7 +36,7 @@ project( "flare" )
 		debugenvs{ "PATH=%PATH%;extern/dll/Debug" }
 		libdirs{ "extern/lib/Debug" }
 	filter{ "configurations:Debug", "system:windows" }
-		links{ "vld" }
+		links{ "vld", "assimpd" }
 		forceincludes{ "%{_WORKING_DIR}/extern/include/vld/vld.h" }
 
 
@@ -48,3 +48,6 @@ project( "flare" )
 		flags{ "OptimizeSpeed" }
 		debugenvs{ "PATH=%PATH%;extern/dll/Release" }
 		libdirs{ "extern/lib/Release" }	
+
+	filter{ "configurations:OptimisedDebug or Release", "system:windows" }
+		links{ "assimp" }
