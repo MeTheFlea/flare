@@ -23,7 +23,7 @@ Renderer* Renderer::GetInstance() {
 }
 
 void Renderer::Render() {
-	const auto size = m_renderQueue.size();
+	const int size = m_renderQueue.size();
 	for( int i = 0; i < size; ++i ) {
 		m_renderQueue[i]->Render();
 	}
