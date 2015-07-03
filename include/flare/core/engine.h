@@ -21,11 +21,6 @@ namespace flare {
 				Log.Fatal( "Error initialising glfw!" );
 			}
 
-			//glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 );
-			//glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
-			//glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE );
-			//glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE );
-
 			m_pWindow = glfwCreateWindow( a_windowWidth, a_windowHeight, a_windowTitle, NULL, NULL );
 			if( !m_pWindow ) {
 				Log.Fatal( "Error initialising window!" );
@@ -45,7 +40,7 @@ namespace flare {
 			const int minMajor = 3;
 			const int minMinor = 3;
 
-			if( majorVer < minMajor || ( majorVer >= minMajor && minorVer < minMinor ) ) {
+			if( majorVer < minMajor || !( majorVer >= minMajor && minorVer < minMinor ) ) {
 				Log.Fatal( "Your OpenGL version is too low!\nMinimum required version is: %i.%i", minMajor, minMinor );
 			}
 
