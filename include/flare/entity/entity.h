@@ -8,32 +8,41 @@ namespace flare {
 		Handle<T> AddComponent() {
 			static_assert(std::is_base_of<ComponentBase, T>::value, "You can only add components!" );
 			Handle<T> retVal = T::s_pPool.New();
-			retVal->SetEntity( this );
+
+			T* pComponent = T::s_pPool.GetObjFromHandle( retVal );
+			pComponent->SetEntity( this );
 			
-			Handle<ComponentBase> base( retVal.operator->() );
-			m_components.push_back( base );
+			m_components.push_back( new Handle<T>( retVal ) );
 
 			return retVal;
 		}
 
 		template<class T>
 		void DestroyComponent( Handle<T>& a_component ) {
-			if( a_component == nullptr ) { return; }
-			auto findResult = std::find( m_components.begin(), m_components.end(), a_component.operator->() );
+			if( a_component.GetObj() == nullptr ) { return; }
+			
+			auto findResult = std::find( m_components.begin(), m_components.end(), a_component );
 			if( findResult != m_components.end() ) {
-				Components::Delete( a_component.operator->() );
+				a_component.DeleteObj();
+				delete (*findResult);
 				m_components.erase( findResult );
 			}	
 		}
 
 		template<class T>
 		void DestroyComponent() {
-			DestroyComponent( GetComponent<T>() );
+			DestroyComponent( GetComponentHandle<T>() );
 		}
 
 		template<class T>
-		Handle<T> GetComponent() {
-			return T::s_pPool.FindFromEntity( this );
+		Handle<T> GetComponentHandle() {
+			return T::FindFromEntity( this );
+		}
+
+		// dangerous
+		template<class T>
+		T* GetComponent( Handle<T>& a_handle ) {
+			return T::s_pPool.GetObjFromHandle( a_handle );
 		}
 
 		template<class T>
@@ -65,7 +74,7 @@ namespace flare {
 		
 	private:
 		static std::vector<Entity*> s_entities;
-		std::vector<Handle<ComponentBase>> m_components;
+		std::vector<HandleBase*> m_components;
 
 		void DestroyAllComponents();
 	};

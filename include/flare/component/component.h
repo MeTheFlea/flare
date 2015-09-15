@@ -30,7 +30,6 @@ namespace flare {
 
 		virtual ~ComponentBase() {}
 
-		virtual void RemoveFromPool() {}
 	};
 
 	class Components {
@@ -59,11 +58,7 @@ namespace flare {
 			s_renderFunctions.push_back( a_function );
 		}
 	protected:
-		friend class Entity;
 
-		static void Delete( ComponentBase* a_pComponent ) {
-			a_pComponent->RemoveFromPool();
-		}
 	private:
 		static std::vector<std::function<void()>> s_updateFunctions;
 		static std::vector<std::function<void()>> s_renderFunctions;
@@ -88,6 +83,15 @@ namespace flare {
 			}
 		}
 
+		static Handle<T> FindFromEntity( Entity* a_pEntity ) {
+			int components = s_pPool.GetSize();
+			for( int i = 0; i < components; ++i ) {
+				if( s_pPool[i].m_pEntity == a_pEntity ) {
+					return s_pPool.GetHandleFromObj( s_pPool[i] );
+				}
+			}
+		}
+
 	protected:
 		Component() {
 			static bool registered = false;
@@ -104,10 +108,6 @@ namespace flare {
 		}
 
 		virtual ~Component() {}
-
-		void RemoveFromPool() {
-			s_pPool.Delete( (T*)this );
-		}
 	};
 	template<class T, int FLAGS>
 	Pool<T> Component<T, FLAGS>::s_pPool;

@@ -1,14 +1,30 @@
 #pragma once
 #include "core/handle.h"
 #include "core/logger.h"
-
+#include "util/typedefs.h"
 #include <new>
 
 namespace flare {
 	class Entity;
+	class PoolBase {
+	public:
+		PoolBase() :
+			m_freeID( 0 ) {
+
+		}
+		virtual ~PoolBase() {}
+
+		virtual void Delete( PoolID a_id ) = 0;
+	protected:
+		std::map<PoolID, PoolIndex> m_IDToIndex;
+		std::map<PoolIndex, PoolID> m_indexToID;
+		PoolID m_freeID;
+	private:
+
+	};
 
 	template<class T>
-	class Pool {
+	class Pool : public PoolBase {
 	public:
 		Pool() {
 			m_pool.reserve( 20 );
@@ -20,46 +36,45 @@ namespace flare {
 		}
 
 		Handle<T> New() {
-			auto oldCapacity = m_pool.capacity();
-			T* oldStartAddr = (m_pool.data());
 			m_pool.emplace_back();
-			if( oldCapacity != m_pool.capacity() ) {
-				T* startAddr = m_pool.data();
-				for( unsigned int i = 0; i < m_pool.size()-1; ++i ) {
-					Handle<T>::UpdateHandles( oldStartAddr + i, startAddr + i );
-					Handle<ComponentBase>::UpdateHandles( oldStartAddr + i, startAddr + i );
-				}
-			}
-			T* component = &m_pool[m_pool.size()-1];
 
-			Handle<T> handle( component );
-		
-			return handle;
+			PoolIndex index = m_pool.size()-1;
+			
+			// making sure id is not already being used
+			auto findResult = m_IDToIndex.find( m_freeID );
+			while( findResult != m_IDToIndex.end() ) {
+				m_freeID++;
+			}
+
+			PoolID id = m_freeID++;
+
+
+			m_IDToIndex.insert( std::pair<PoolID, PoolIndex>( id, index ) );
+			m_indexToID.insert( std::pair<PoolID, PoolIndex>( index, id ) );
+
+			return Handle<T>( id, this );
 		}
 
-		Handle<T> FindFromEntity( Entity* a_pEntity ) {
-			const int size = m_pool.size();
-			for( int i = 0; i < size; ++i ) {
-				T* component = (T*)( &(m_pool[i]) );
-				if( component->m_pEntity == a_pEntity ) {
-					Handle<T> handle( component );
-					return handle;
-				}
-			}
-			return Handle<T>();
+		Handle<T> GetHandleFromObj( T* a_obj ) {
+			PoolIndex index = ( a_obj - (&m_pool[0]) ) / sizeof( T );
+
+			return Handle<T>( m_indexToID[index], this );
+		}
+		T* GetObjFromHandle( Handle<T>& a_handle ) {
+			return GetObj( a_handle.GetID() );
 		}
 
-		void Delete( T* const a_obj ) {
-			if( a_obj == nullptr ) { return; }
+		void Delete( PoolID a_id ) override {
+			auto findResult = m_IDToIndex.find( a_id );
+			if( findResult == m_IDToIndex.end() ) { return; }
 
-			// finding the index of the object relative to the start of the pool
-			int index = ( ((T*)a_obj) - ((T*)(m_pool.data())) );
-
-			Handle<T>::InvalidateHandles( a_obj );
-			Handle<ComponentBase>::InvalidateHandles( a_obj );
-			Swap( index, m_pool.size()-1 );
+			Swap( (*findResult).second, m_pool.size()-1 );
 			
 			m_pool.erase( m_pool.end()-1 );
+			
+			PoolIndex index = m_IDToIndex[a_id];
+			m_indexToID.erase( m_indexToID.find( index ) );
+			m_IDToIndex.erase( m_IDToIndex.find( a_id ) );
 		}
 
 		int GetSize() const { 
@@ -67,19 +82,21 @@ namespace flare {
 		}
 
 		T& operator[]( int a_index ) {
-			return ( m_pool[a_index] );
+			return m_pool[a_index];
+		}
+
+		T* GetObj( PoolID a_id ) {
+			auto findResult = m_IDToIndex.find( a_id );
+			if( findResult == m_IDToIndex.end() ) { return nullptr; }
+
+			return &m_pool[(*findResult).second];
 		}
 	private:
 		void Clear() {
-			const int size = m_pool.size();
-			for( int i = 0; i < size; ++i ) {
-				Handle<T>::InvalidateHandles( &m_pool[i] );
-				Handle<ComponentBase>::InvalidateHandles( &m_pool[i] );
-			}
 			m_pool.clear();
 		}
 
-		void Swap( int a_index1, int a_index2 ) {
+		void Swap( PoolIndex a_index1, PoolIndex a_index2 ) {
 			T& obj1 = m_pool[a_index1];
 			
 			T& obj2 = m_pool[a_index2];
@@ -90,12 +107,17 @@ namespace flare {
 			memcpy( &obj1, &obj2, sizeof( T ) );
 			memcpy( &obj2, &tmp, sizeof( T ) );
 
-			Handle<T>::UpdateHandles( &obj1, &obj2 );
-			Handle<ComponentBase>::UpdateHandles( &obj1, &obj2 );
+			PoolID id1 = m_indexToID[a_index1];
+			PoolID id2 = m_indexToID[a_index2];
+
+			m_IDToIndex[id1] = a_index2;
+			m_IDToIndex[id2] = a_index1;
+
+			m_indexToID[a_index1] = id2;
+			m_indexToID[a_index2] = id1;
 		}
 
-		// fixed size array of objects in the pool
-		std::vector<T> m_pool;
 		T* m_temp;
+		std::vector<T> m_pool;
 	};
 }
