@@ -8,7 +8,7 @@
 #include "entity/entity.h"
 #include "component/component.h"
 
-#include "core/renderer.h"
+#include "graphics/renderer.h"
 
 #define MapGLFWToInput( a, b ) case a: code = b; break;
 
@@ -40,11 +40,9 @@ namespace flare {
 			const int minMajor = 3;
 			const int minMinor = 3;
 
-			if( majorVer < minMajor || !( majorVer >= minMajor && minorVer < minMinor ) ) {
+			if( majorVer < minMajor || ( majorVer == minMajor && minorVer < minMinor ) ) {
 				Log.Fatal( "Your OpenGL version is too low!\nMinimum required version is: %i.%i", minMajor, minMinor );
 			}
-
-			
 			
 			glfwSwapInterval( 1 );
 			glfwSetKeyCallback( m_pWindow, KeyCallback );
@@ -54,7 +52,7 @@ namespace flare {
 
 		// run the main loop of the templated Game set in the constructor of the engine (this will call OnUpdate() and OnRender() on the game, and Reset() on the Input manager appropriately)
 		void Run() {
-			Renderer* renderer = Renderer::GetInstance();
+			Renderer* pRenderer = Renderer::GetInstance();
 			while( !glfwWindowShouldClose( m_pWindow ) ) {
 				Time.StartFrame();
 				glfwPollEvents();
@@ -62,9 +60,9 @@ namespace flare {
 				Components::Update();
 				m_game.OnUpdate();
 
-				renderer->ClearFrame();
+				pRenderer->ClearFrame();
 				Components::Render();
-				renderer->Render();
+				pRenderer->Render();
 				m_game.OnRender();
 
 				Input.Reset();
@@ -75,7 +73,7 @@ namespace flare {
 			}
 			m_game.OnQuit();
 			Entity::CleanUp();
-			delete renderer;
+			delete pRenderer;
 		}
 
 		static void KeyCallback( GLFWwindow*, int a_key, int, int a_action, int ) {

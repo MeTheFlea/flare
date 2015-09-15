@@ -5,18 +5,16 @@
 namespace flare {
 	class Model {
 	public:
-		static Model* LoadMesh( std::string a_asset );
-		static void SetAssetDir( std::string a_dir ) { s_dir = a_dir; }
-
 		~Model() {}
 
 		void Render();
 	protected:
+		friend class Resources;
 		Model( std::string a_filepath );
 		
 		std::vector<Mesh> m_meshes;
 
 	private:
-		static std::string s_dir;
+		void Refresh( Renderer::GraphicsAPI a_api );
 	};
 }

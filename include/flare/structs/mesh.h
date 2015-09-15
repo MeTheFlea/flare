@@ -1,7 +1,7 @@
 #pragma once
 #include "external/stl.h"
 #include "structs/vertex.h"
-#include "core/renderer.h"
+#include "graphics/renderer.h"
 
 namespace flare {
 	class Mesh_Platform;
@@ -15,9 +15,9 @@ namespace flare {
 		~Mesh();
 	protected:
 		friend class Model;
-		void Init( Renderer::GraphicsAPI a_api );
+		void Refresh( Renderer::GraphicsAPI a_api );
 
-		Mesh_Platform* m_mesh;
+		Mesh_Platform* m_pMesh;
 	private:
 		
 	};

@@ -3,29 +3,36 @@
 #include "core/timeManager.h"
 #include "core/logger.h"
 
-#include "core/renderer.h"
+#include "graphics/renderer.h"
 #include "component/meshComponent.h"
 
 #include "entity/entity.h"
 
 #include "structs/model.h"
 
-using namespace flare;
+#include "core/resources.h"
 
-Renderer* g_renderer;
+#include "component/testComponent.h"
+
+using namespace flare;
 
 Entity* g_entity = nullptr;
 
 void Game::OnInit() {
-	g_renderer = Renderer::GetInstance();
-	g_renderer->SetClearColour( 0.1f, 0.2f, 0.1f );
+	Renderer::GetInstance()->SetClearColour( 0.1f, 0.2f, 0.1f );
+	Resources::GetInstance()->SetAssetDir( "assets/" );
 
-	Model::SetAssetDir( "assets/models/" );
+	
+	for( int i = 0; i < 10; ++i ) {
+		Entity* pEntity = Entity::Create<Entity>();
+		pEntity->AddComponent<MeshComponent>();
+		auto compHandle = pEntity->AddComponent<TestComponent>();
+		auto comp = pEntity->GetComponent( compHandle );
+		comp->m_message = std::to_string( i );
 
-	//g_entity = Entity::Create<Entity>();
-	for( int i = 0; i < 1; ++i ) {
-		Entity* entity = Entity::Create<Entity>();
-		entity->AddComponent<MeshComponent>();
+		if( i == 5 ) {
+			g_entity = pEntity;
+		}
 	}
 
 	InitKeyBindings();
@@ -39,6 +46,10 @@ void Game::OnUpdate() {
 	// update
 	if( Input.GetButtonDown( "Quit" ) ) {
 		Quit();
+	}
+
+	if( Input.GetKeyDown( KeyCode::SPACE ) ) {
+		Entity::Destroy( g_entity );
 	}
 }
 

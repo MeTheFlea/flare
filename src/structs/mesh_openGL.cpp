@@ -17,11 +17,6 @@ Mesh_OpenGL::~Mesh_OpenGL() {
 	Clean();
 }
 
-void Mesh_OpenGL::Refresh( const Mesh& a_mesh ) {
-	Clean();
-	Set( a_mesh );
-}
-
 void Mesh_OpenGL::Render( const Mesh& a_mesh ) {
 	glBindVertexArray( m_vao );
 	glDrawElements( GL_TRIANGLES, a_mesh.m_vertexIndices.size(), GL_UNSIGNED_INT, a_mesh.m_vertexIndices.data() );

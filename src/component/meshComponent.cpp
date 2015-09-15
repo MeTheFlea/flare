@@ -2,10 +2,12 @@
 #include "core/logger.h"
 #include "structs/model.h"
 
+#include "core/resources.h"
+
 using namespace flare;
 
 MeshComponent::MeshComponent() {
-	m_model = Model::LoadMesh( "cubeman.obj" );
+	m_model = Resources::GetInstance()->LoadModel( "cubeman.obj" );
 }
 
 MeshComponent::~MeshComponent() {

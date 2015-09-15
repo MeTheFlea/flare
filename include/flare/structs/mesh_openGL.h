@@ -9,12 +9,12 @@ namespace flare {
 		Mesh_OpenGL();
 		~Mesh_OpenGL();
 		
-		void Refresh( const Mesh& a_mesh ) override;
 		void Render( const Mesh& a_mesh ) override;
-	private:
-		void Clean();
-		void Set( const Mesh& a_mesh );
+	protected:
+		void Set( const Mesh& a_mesh ) override;
+		void Clean() override;
 
+	private:
 		GLuint m_vao;
 		GLuint m_vertexBuffer;
 	};

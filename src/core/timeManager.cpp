@@ -9,7 +9,7 @@ TimeManager::TimeManager() :
 	m_deltaTime( 0.0f ),
 	m_timescale( 1.0f ),
 	m_elapsedMilli( 0.0f ),
-	m_currentTime( std::chrono::high_resolution_clock::now() ) {
+	m_currentTime( std::chrono::steady_clock::now() ) {
 	
 }
 
