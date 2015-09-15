@@ -1,0 +1,7 @@
+TODO:
+- AddToQueue( Shader, Mesh )
+ - This will allow the renderer to sort every mesh by shader for the best rendering order.
+- Create Shader class
+- Create resource manager
+
+- put stuff resources (meshes) into pools (like components) and give handles to whatever wants it
