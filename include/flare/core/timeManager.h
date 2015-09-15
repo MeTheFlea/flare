@@ -30,7 +30,7 @@ namespace flare {
 		void SetDeltaTime( const float a_deltaTime );
 		void StartFrame();
 
-		std::chrono::system_clock::time_point m_currentTime;
+		std::chrono::time_point<std::chrono::steady_clock> m_currentTime;
 	};
 }
 
