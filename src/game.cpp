@@ -16,22 +16,21 @@
 
 using namespace flare;
 
-Entity* g_entity = nullptr;
+Entity* g_pEntity;
 
 void Game::OnInit() {
 	Renderer::GetInstance()->SetClearColour( 0.1f, 0.2f, 0.1f );
 	Resources::GetInstance()->SetAssetDir( "assets/" );
 
 	
-	for( int i = 0; i < 10; ++i ) {
-		Entity* pEntity = Entity::Create<Entity>();
-		pEntity->AddComponent<MeshComponent>();
-		auto compHandle = pEntity->AddComponent<TestComponent>();
-		auto comp = pEntity->GetComponent( compHandle );
+	for( int i = 0; i < 4; ++i ) {
+		auto entity = Entity::Create<Entity>();
+		entity->AddComponent<MeshComponent>();
+		auto comp = entity->AddComponent<TestComponent>();
 		comp->m_message = std::to_string( i );
 
-		if( i == 5 ) {
-			g_entity = pEntity;
+		if( i == 0 ) {
+			g_pEntity = entity;
 		}
 	}
 
@@ -49,8 +48,17 @@ void Game::OnUpdate() {
 	}
 
 	if( Input.GetKeyDown( KeyCode::SPACE ) ) {
-		Entity::Destroy( g_entity );
+		if( g_pEntity->GetComponent<TestComponent>() == nullptr ) {
+			g_pEntity->AddComponent<TestComponent>()->m_message = std::string( "recreated" );
+		}
+		else {
+			g_pEntity->GetComponent<TestComponent>()->m_message = std::string( "lasdasdlkasdjkla" );
+		}
 	}
+	if( Input.GetKeyDown( KeyCode::RETURN ) ) {
+		g_pEntity->DestroyComponent<TestComponent>();
+	}
+
 }
 
 void Game::OnRender() {

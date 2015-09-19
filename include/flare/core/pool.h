@@ -2,27 +2,10 @@
 #include "core/handle.h"
 #include "core/logger.h"
 #include "util/typedefs.h"
+#include "core/poolBase.h"
 #include <new>
 
 namespace flare {
-	class Entity;
-	class PoolBase {
-	public:
-		PoolBase() :
-			m_freeID( 0 ) {
-
-		}
-		virtual ~PoolBase() {}
-
-		virtual void Delete( PoolID a_id ) = 0;
-	protected:
-		std::map<PoolID, PoolIndex> m_IDToIndex;
-		std::map<PoolIndex, PoolID> m_indexToID;
-		PoolID m_freeID;
-	private:
-
-	};
-
 	template<class T>
 	class Pool : public PoolBase {
 	public:
@@ -55,14 +38,13 @@ namespace flare {
 			return Handle<T>( id, this );
 		}
 
-		Handle<T> GetHandleFromObj( T* a_obj ) {
-			PoolIndex index = ( a_obj - (&m_pool[0]) ) / sizeof( T );
-
-			return Handle<T>( m_indexToID[index], this );
+		Handle<T> GetHandleFromIndex( PoolIndex a_index ) {
+			return Handle<T>( m_indexToID[a_index], this );
 		}
-		T* GetObjFromHandle( Handle<T>& a_handle ) {
-			return GetObj( a_handle.GetID() );
-		}
+		
+		//T* GetObjFromHandle( Handle<T>& a_handle ) {
+		//	return GetObj( a_handle.m_id );
+		//}
 
 		void Delete( PoolID a_id ) override {
 			auto findResult = m_IDToIndex.find( a_id );
@@ -91,11 +73,11 @@ namespace flare {
 
 			return &m_pool[(*findResult).second];
 		}
-	private:
+
 		void Clear() {
 			m_pool.clear();
 		}
-
+	private:
 		void Swap( PoolIndex a_index1, PoolIndex a_index2 ) {
 			T& obj1 = m_pool[a_index1];
 			

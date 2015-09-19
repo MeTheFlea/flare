@@ -9,8 +9,7 @@ namespace flare {
 			static_assert(std::is_base_of<ComponentBase, T>::value, "You can only add components!" );
 			Handle<T> retVal = T::s_pPool.New();
 
-			T* pComponent = T::s_pPool.GetObjFromHandle( retVal );
-			pComponent->SetEntity( this );
+			retVal->SetEntity( this );
 			
 			m_components.push_back( new Handle<T>( retVal ) );
 
@@ -18,31 +17,20 @@ namespace flare {
 		}
 
 		template<class T>
-		void DestroyComponent( Handle<T>& a_component ) {
-			if( a_component.GetObj() == nullptr ) { return; }
-			
-			auto findResult = std::find( m_components.begin(), m_components.end(), a_component );
-			if( findResult != m_components.end() ) {
-				a_component.DeleteObj();
-				delete (*findResult);
-				m_components.erase( findResult );
-			}	
-		}
-
-		template<class T>
 		void DestroyComponent() {
-			DestroyComponent( GetComponentHandle<T>() );
+			for( size_t i = 0; i < m_components.size(); ++i ) {
+				if( dynamic_cast<Handle<T>*>( m_components[i] ) != nullptr ) {
+					m_components[i]->DeleteObj();
+					delete m_components[i];
+					m_components.erase( m_components.begin() + i );
+					return;
+				}
+			}
 		}
 
 		template<class T>
-		Handle<T> GetComponentHandle() {
+		Handle<T> GetComponent() {
 			return T::FindFromEntity( this );
-		}
-
-		// dangerous
-		template<class T>
-		T* GetComponent( Handle<T>& a_handle ) {
-			return T::s_pPool.GetObjFromHandle( a_handle );
 		}
 
 		template<class T>

@@ -1,26 +1,26 @@
 #pragma once
 #include "util/typedefs.h"
+#include "core/poolBase.h"
 
 namespace flare {
-	class PoolBase;
-
 	class HandleBase {
 	public:
 		HandleBase( PoolID a_id, PoolBase* a_pPool ) :
 			m_id( a_id ),
 			m_pPool( a_pPool ) {
-
 		}
 
 		virtual ~HandleBase() {}
 
-		virtual PoolID GetID() const { return m_id; }
-		virtual PoolBase* GetPool() const { return m_pPool; }
+		virtual void DeleteObj() {
+			if( m_pPool != nullptr) {
+				m_pPool->Delete( m_id );
+			}
+		}
 
 	protected:
-		const PoolID m_id;
-		PoolBase* const m_pPool;
-
+		PoolID m_id;
+		PoolBase* m_pPool;
 	private:
 
 	};	
@@ -41,7 +41,27 @@ namespace flare {
 		}
 		~Handle() {}
 
+		T* operator->() {
+			if( m_pRealPool != nullptr ) {
+				return m_pRealPool->GetObj( m_id );
+			}
+			else {
+				return nullptr;
+			}
+		}
+
+		bool operator==( const std::nullptr_t& a_pNull ) {
+			return operator->() == a_pNull;
+		}
+
+		void DeleteObj() override {
+			if( m_pRealPool != nullptr ) {
+				m_pRealPool->Delete( m_id );
+			}
+		}
+		
+
 	private:
-		Pool<T>* const m_pRealPool;
+		Pool<T>* m_pRealPool;
 	};
 }

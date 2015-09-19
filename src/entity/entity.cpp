@@ -13,7 +13,7 @@ Entity::~Entity() {
 
 void Entity::DestroyAllComponents() {
 	for( unsigned int i = 0; i < m_components.size(); ++i ) {
-		m_components[i]->GetPool()->Delete( m_components[i]->GetID() );
+		m_components[i]->DeleteObj();
 		delete m_components[i];
 	}
 	m_components.clear();

@@ -87,9 +87,10 @@ namespace flare {
 			int components = s_pPool.GetSize();
 			for( int i = 0; i < components; ++i ) {
 				if( s_pPool[i].m_pEntity == a_pEntity ) {
-					return s_pPool.GetHandleFromObj( s_pPool[i] );
+					return s_pPool.GetHandleFromIndex( i );
 				}
 			}
+			return Handle<T>();
 		}
 
 	protected:

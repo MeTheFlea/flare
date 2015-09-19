@@ -4,4 +4,5 @@ TODO:
 - Create Shader class
 - Create resource manager
 
-- put stuff resources (meshes) into pools (like components) and give handles to whatever wants it
+
+- Dereferencing a handle will not cache the object (... no need to optimise yet).
